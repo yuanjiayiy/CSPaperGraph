@@ -1,0 +1,5 @@
+# For SPECTER 2.0 local embedding (used when API doesn't provide embedding)
+# Install: pip install -r requirements-specter2.txt
+torch>=1.13
+transformers>=4.35
+adapters>=0.1.0

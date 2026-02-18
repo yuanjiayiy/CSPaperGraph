@@ -1,0 +1,14 @@
+# For LLM use quantification (Mapping the Increasing Use of LLMs in Scientific Papers)
+# https://github.com/Weixin-Liang/Mapping-the-Increasing-Use-of-LLMs-in-Scientific-Papers
+# Install: pip install -r requirements-llm-quantify.txt
+# Then: python -m spacy download en_core_web_sm
+
+pandas>=2.0
+numpy>=1.24
+pyarrow>=15.0
+fastparquet>=2024.2
+scipy>=1.10
+spacy>=3.0
+
+# Optional: faster parallel apply
+# swifter>=1.4
