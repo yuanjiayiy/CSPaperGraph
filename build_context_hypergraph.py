@@ -8,6 +8,9 @@ Output: list of tuples per year, where each tuple = (venue1, venue2, ...).
 
 import json
 from pathlib import Path
+from re import T
+
+from pandas._libs.lib import tuples_to_object_array
 
 from config import YEAR_END, YEAR_START
 
@@ -27,17 +30,16 @@ def extract_cited_venues(paper: dict) -> tuple[str, ...]:
     return tuple(sorted(venues))
 
 
-def build_context_hyperedges_for_year(papers: list[dict]) -> list[tuple]:
+def build_context_tuples_for_year(papers: list[dict]) -> list[tuple]:
     """
-    Build context hyperedges for a year.
-    Each hyperedge = tuple of cited venues. Papers with < 2 cited venues are skipped.
+    Build context tuples for a year.
+    Each tuple = (paper_id, cited venue).
     """
-    hyperedges = []
+    tuples = []
     for paper in papers:
         venues = extract_cited_venues(paper)
-        if len(venues) >= 2:  # Hyperedge needs at least 2 nodes
-            hyperedges.append(venues)
-    return hyperedges
+        tuples.extend((paper["paperId"], venue) for venue in venues)
+    return tuples
 
 
 def main():
@@ -54,12 +56,12 @@ def main():
         with open(path) as f:
             papers = json.load(f)
 
-        hyperedges = build_context_hyperedges_for_year(papers)
-        print(f"{year}: {len(hyperedges)} context hyperedges from {len(papers)} papers")
+        tuples = build_context_tuples_for_year(papers)
+        print(f"{year}: {len(tuples)} context tuples from {len(papers)} papers")
 
-        out_path = output_dir / f"context_hyperedges_{year}.json"
+        out_path = output_dir / f"context_tuples_{year}.json"
         with open(out_path, "w") as f:
-            json.dump(hyperedges, f, indent=0)
+            json.dump(tuples, f, indent=0)
         print(f"  Saved to {out_path}")
 
     print("Done.")

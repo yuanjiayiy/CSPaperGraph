@@ -33,17 +33,16 @@ def extract_keywords(paper: dict) -> tuple[str, ...]:
     return tuple(sorted(keywords))
 
 
-def build_content_hyperedges_for_year(papers: list[dict]) -> list[tuple]:
+def build_content_tuples_for_year(papers: list[dict]) -> list[tuple]:
     """
-    Build content hyperedges for a year.
-    Each hyperedge = tuple of keywords. Papers with < 2 keywords are skipped.
+    Build content tuple for a year.
+    Each tuple = (paper_id, keyword)
     """
-    hyperedges = []
+    tuples = []
     for paper in papers:
         keywords = extract_keywords(paper)
-        if len(keywords) >= 2:  # Hyperedge needs at least 2 nodes
-            hyperedges.append(keywords)
-    return hyperedges
+        tuples.extend((paper["paperId"], keyword) for keyword in keywords)
+    return tuples
 
 
 def main():
@@ -60,12 +59,12 @@ def main():
         with open(path) as f:
             papers = json.load(f)
 
-        hyperedges = build_content_hyperedges_for_year(papers)
-        print(f"{year}: {len(hyperedges)} content hyperedges from {len(papers)} papers")
+        tuples = build_content_tuples_for_year(papers)
+        print(f"{year}: {len(tuples)} content tuples from {len(papers)} papers")
 
-        out_path = output_dir / f"content_hyperedges_{year}.json"
+        out_path = output_dir / f"content_tuples_{year}.json"
         with open(out_path, "w") as f:
-            json.dump(hyperedges, f, indent=0)
+            json.dump(tuples, f, indent=0)
         print(f"  Saved to {out_path}")
 
     print("Done.")
