@@ -17,8 +17,8 @@ VENUE_ALIASES = {
 }
 
 # Year range for analysis (ICML started 1980, NeurIPS 1987, ICLR 2013, AAAI 1980)
-YEAR_START = 2013  # ICLR start - ensures all 4 venues have papers
-YEAR_END = 2023
+YEAR_START = 2020  # ICLR start - ensures all 4 venues have papers
+YEAR_END = 2020
 
 # Semantic Scholar API
 S2_API_BASE = "https://api.semanticscholar.org/graph/v1"

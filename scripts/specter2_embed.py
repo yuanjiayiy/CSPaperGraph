@@ -3,6 +3,7 @@ SPECTER 2.0 embedding computation for papers without API embeddings.
 Uses allenai/specter2_base + allenai/specter2 (proximity adapter).
 """
 from typing import Dict, Any, List, Optional
+from tqdm import tqdm
 
 _SPECTER2_MODEL = None
 _SPECTER2_TOKENIZER = None
@@ -46,6 +47,7 @@ def specter2_embed_papers(
         device = "cuda" if torch.cuda.is_available() else "cpu"
     model = model.to(device)
     model.eval()
+    print(f"Computing SPECTER 2.0 embeddings for {len(papers)} papers on {device}")
 
     text_batch = [
         (p.get("title") or "") + tokenizer.sep_token + (p.get("abstract") or "")
@@ -53,7 +55,7 @@ def specter2_embed_papers(
     ]
 
     all_embeddings = []
-    for i in range(0, len(text_batch), batch_size):
+    for i in tqdm(range(0, len(text_batch), batch_size), desc="Computing SPECTER 2.0 embeddings"):
         batch = text_batch[i : i + batch_size]
         inputs = tokenizer(
             batch,
